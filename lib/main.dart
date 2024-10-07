@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,6 +18,17 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  TextEditingController weightController = TextEditingController();
+  TextEditingController heightController = TextEditingController();
+
+  String _infoText = 'Informe seus dados!';
+
+  void _resetFields() {
+    weightController.text = '';
+    heightController.text = '';
+    _infoText = 'Informe seus dados!';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +51,9 @@ class _HomeState extends State<Home> {
               size: 25,
             ),
             onPressed: () {
-              setState(() {});
+              setState(() {
+                _resetFields();
+              });
             },
           ),
         ],
@@ -57,6 +71,7 @@ class _HomeState extends State<Home> {
             ),
             TextField(
               keyboardType: TextInputType.number,
+              controller: weightController,
               decoration: InputDecoration(
                 labelText: 'Peso (kg)',
                 labelStyle: TextStyle(
@@ -72,6 +87,7 @@ class _HomeState extends State<Home> {
             ),
             TextField(
               keyboardType: TextInputType.number,
+              controller: heightController,
               decoration: InputDecoration(
                 labelText: 'Altura (cm)',
                 labelStyle: TextStyle(
@@ -92,7 +108,37 @@ class _HomeState extends State<Home> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    //calcular Imc
+                    double weight = double.parse(weightController.text);
+                    double height = double.parse(heightController.text) / 100;
+                    double imc = weight / (height * height);
+                    //pop up
+                    _infoText =
+                        'Seu IMC é: ${imc.toStringAsPrecision(4)}\n${imc < 18.6 ? 'Abaixo do peso' : imc < 24.9 ? 'Peso ideal' : imc < 29.9 ? 'Levemente acima do peso' : imc < 34.9 ? 'Obesidade Grau I' : imc < 39.9 ? 'Obesidade Grau II' : 'Obesidade Grau III'}';
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          titleTextStyle: TextStyle(
+                            color: Colors.green,
+                            fontSize: 25,
+                          ),
+                          title: Text('Resultado do IMC'),
+                          content: Text(
+                              'Seu IMC é: ${imc.toStringAsPrecision(4)} \n${imc < 18.6 ? 'Abaixo do peso' : imc < 24.9 ? 'Peso ideal' : imc < 29.9 ? 'Levemente acima do peso' : imc < 34.9 ? 'Obesidade Grau I' : imc < 39.9 ? 'Obesidade Grau II' : 'Obesidade Grau III'}'),
+                          actions: [
+                            TextButton(
+                              child: Text('Ok'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
@@ -106,7 +152,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
             ),
-            const Text('Info',
+            Text(_infoText,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.green,
