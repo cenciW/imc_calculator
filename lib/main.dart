@@ -29,6 +29,30 @@ class _HomeState extends State<Home> {
     _infoText = 'Informe seus dados!';
   }
 
+  void _calculateImc() {
+    setState(() {
+      double weight = double.parse(weightController.text);
+      double height = double.parse(heightController.text) / 100;
+
+      double imc = weight / (height * height);
+
+      if (imc < 18.6) {
+        _infoText = 'Abaixo do peso \n IMC: ${imc.toStringAsPrecision(4)}';
+      } else if (imc >= 18.6 && imc < 24.9) {
+        _infoText = 'Peso ideal \n IMC: ${imc.toStringAsPrecision(4)}';
+      } else if (imc >= 24.9 && imc < 29.9) {
+        _infoText =
+            'Levemente acima do peso \n IMC: ${imc.toStringAsPrecision(4)}';
+      } else if (imc >= 29.9 && imc < 34.9) {
+        _infoText = 'Obesidade Grau I \n IMC: ${imc.toStringAsPrecision(4)}';
+      } else if (imc >= 34.9 && imc < 39.9) {
+        _infoText = 'Obesidade Grau II \n IMC: ${imc.toStringAsPrecision(4)}';
+      } else if (imc >= 40) {
+        _infoText = 'Obesidade Grau III \n IMC: ${imc.toStringAsPrecision(4)}';
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -108,37 +132,37 @@ class _HomeState extends State<Home> {
                 padding:
                     const EdgeInsets.symmetric(vertical: 2, horizontal: 20),
                 child: ElevatedButton(
-                  onPressed: () {
-                    //calcular Imc
-                    double weight = double.parse(weightController.text);
-                    double height = double.parse(heightController.text) / 100;
-                    double imc = weight / (height * height);
-                    //pop up
-                    _infoText =
-                        'Seu IMC é: ${imc.toStringAsPrecision(4)}\n${imc < 18.6 ? 'Abaixo do peso' : imc < 24.9 ? 'Peso ideal' : imc < 29.9 ? 'Levemente acima do peso' : imc < 34.9 ? 'Obesidade Grau I' : imc < 39.9 ? 'Obesidade Grau II' : 'Obesidade Grau III'}';
-                    showDialog(
-                      context: context,
-                      builder: (context) {
-                        return AlertDialog(
-                          titleTextStyle: TextStyle(
-                            color: Colors.green,
-                            fontSize: 25,
-                          ),
-                          title: Text('Resultado do IMC'),
-                          content: Text(
-                              'Seu IMC é: ${imc.toStringAsPrecision(4)} \n${imc < 18.6 ? 'Abaixo do peso' : imc < 24.9 ? 'Peso ideal' : imc < 29.9 ? 'Levemente acima do peso' : imc < 34.9 ? 'Obesidade Grau I' : imc < 39.9 ? 'Obesidade Grau II' : 'Obesidade Grau III'}'),
-                          actions: [
-                            TextButton(
-                              child: Text('Ok'),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
+                  onPressed: _calculateImc,
+                  //   //calcular Imc
+                  //   double weight = double.parse(weightController.text);
+                  //   double height = double.parse(heightController.text) / 100;
+                  //   double imc = weight / (height * height);
+                  //   //pop up
+                  //   _infoText =
+                  //       'Seu IMC é: ${imc.toStringAsPrecision(4)}\n${imc < 18.6 ? 'Abaixo do peso' : imc < 24.9 ? 'Peso ideal' : imc < 29.9 ? 'Levemente acima do peso' : imc < 34.9 ? 'Obesidade Grau I' : imc < 39.9 ? 'Obesidade Grau II' : 'Obesidade Grau III'}';
+                  //   showDialog(
+                  //     context: context,
+                  //     builder: (context) {
+                  //       return AlertDialog(
+                  //         titleTextStyle: TextStyle(
+                  //           color: Colors.green,
+                  //           fontSize: 25,
+                  //         ),
+                  //         title: Text('Resultado do IMC'),
+                  //         content: Text(
+                  //             'Seu IMC é: ${imc.toStringAsPrecision(4)} \n${imc < 18.6 ? 'Abaixo do peso' : imc < 24.9 ? 'Peso ideal' : imc < 29.9 ? 'Levemente acima do peso' : imc < 34.9 ? 'Obesidade Grau I' : imc < 39.9 ? 'Obesidade Grau II' : 'Obesidade Grau III'}'),
+                  //         actions: [
+                  //           TextButton(
+                  //             child: Text('Ok'),
+                  //             onPressed: () {
+                  //               Navigator.of(context).pop();
+                  //             },
+                  //           ),
+                  //         ],
+                  //       );
+                  //     },
+                  //   );
+                  // },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
                   ),
