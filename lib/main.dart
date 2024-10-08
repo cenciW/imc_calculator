@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+// import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -30,6 +30,7 @@ class _HomeState extends State<Home> {
     heightController.text = '';
     setState(() {
       _infoText = 'Informe seus dados!';
+      _formKey = GlobalKey<FormState>();
     });
   }
 
